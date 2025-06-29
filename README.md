@@ -1,4 +1,4 @@
-# 🧨 Project Mayhem Codex
+#  Project Mayhem Codex
 
 > You are not your 9 to 5. You are your 3am commit.
 
@@ -15,7 +15,7 @@ A radically unorthodox, Fight Club–themed developer portfolio. Built not for r
 - **Custom Easter Eggs** – Terminal overlay, glitch events, secret unlocks
 
 
-## 📂 Directory Structure
+##  Directory Structure
 
 ```bash
 /
@@ -52,9 +52,9 @@ npm run lint
 
     📧 warulkarwise@gmail.com
 
-    🐙 GitHub
+    🐙 GitHub (https://github.com/himanshu-warulkar/)
 
-    💼 LinkedIn
+    💼 LinkedIn(https://www.linkedin.com/himanshu-warulkar/)
 
 ## Attribution
 
