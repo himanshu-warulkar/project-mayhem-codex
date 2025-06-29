@@ -12,6 +12,10 @@ const Index = () => {
   const [disabledElement, setDisabledElement] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [showResumeModal, setShowResumeModal] = useState(false);
+  const [terminalLines, setTerminalLines] = useState<string[]>([]);
+  const [currentIdentity, setCurrentIdentity] = useState(0);
+  const [showDecrypt, setShowDecrypt] = useState(false);
+  const [isDecrypted, setIsDecrypted] = useState(false);
 
   const quotes = [
     "I am Jack's burning CPU.",
@@ -29,6 +33,16 @@ const Index = () => {
     "Except the little fish",
     "But they told me, he swears",
     "Trying to talk to me coy koi"
+  ];
+
+  const identityFragments = [
+    "Builder",
+    "Breaker", 
+    "Root",
+    "Daemon",
+    "Himanshu",
+    "System Process",
+    "????"
   ];
 
   const projects = [
@@ -145,6 +159,39 @@ const Index = () => {
     }
   ];
 
+  // Terminal identity animation
+  useEffect(() => {
+    const initializeTerminal = () => {
+      const lines = [
+        "[ Identity.CORE ] => /usr/bin/warulkar",
+        "[ MASK_STATUS ] => unstable",
+        "[ DUALITY_MODE ] => active",
+        "[ ERROR ] => fragmented identity – rendering mask fragments..."
+      ];
+      
+      let currentLine = 0;
+      const addLines = () => {
+        if (currentLine < lines.length) {
+          setTerminalLines(prev => [...prev, lines[currentLine]]);
+          currentLine++;
+          setTimeout(addLines, 800);
+        } else {
+          // Start identity cycling after terminal initialization
+          setTimeout(() => {
+            const identityTimer = setInterval(() => {
+              setCurrentIdentity(prev => (prev + 1) % identityFragments.length);
+            }, 1500);
+            return () => clearInterval(identityTimer);
+          }, 1000);
+        }
+      };
+      
+      setTimeout(addLines, 500);
+    };
+
+    initializeTerminal();
+  }, []);
+
   // Easter egg: Resume unlock listener
   useEffect(() => {
     const handleKeyUp = (e: KeyboardEvent) => {
@@ -195,6 +242,10 @@ const Index = () => {
     
     // Scroll to projects
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleDecrypt = () => {
+    setIsDecrypted(!isDecrypted);
   };
 
   useEffect(() => {
@@ -289,14 +340,86 @@ const Index = () => {
           </div>
         </div>
         
-        {/* 3D Mask Placeholder */}
+        {/* Terminal Identity Block */}
         <div className="hidden lg:block flex-1 flex justify-center">
-          <div className="w-80 h-80 bg-gradient-to-br from-gray-800 to-black border border-red-600/30 flex items-center justify-center font-mono text-red-600 text-center p-8 transform rotate-3 hover:rotate-0 transition-transform duration-500">
-            <div className="space-y-4">
-              <div className="text-4xl">🎭</div>
-              <p className="text-sm">FRAGMENTED<br/>IDENTITY<br/>PLACEHOLDER</p>
-              <div className="text-xs text-gray-500">3D Mask Coming Soon</div>
+          <div className="w-96 h-80 bg-black border border-red-600/30 font-mono text-sm relative overflow-hidden">
+            {/* Terminal Header */}
+            <div className="bg-red-600/10 border-b border-red-600/30 px-4 py-2 flex items-center justify-between">
+              <span className="text-red-600 text-xs">IDENTITY.CORE</span>
+              <div className="flex space-x-1">
+                <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+                <span className="text-red-600 text-xs">RENDERING</span>
+              </div>
             </div>
+            
+            {/* Terminal Content */}
+            <div className="p-4 space-y-2">
+              {terminalLines.map((line, index) => (
+                <div key={index} className="text-green-400 text-xs animate-fade-in">
+                  {line}
+                </div>
+              ))}
+              
+              {terminalLines.length >= 4 && (
+                <div className="mt-4 space-y-2">
+                  <div className="text-yellow-400 text-xs">
+                    [ IDENTITY_FRAGMENT ] => {identityFragments[currentIdentity]}
+                    <span className="animate-pulse">_</span>
+                  </div>
+                  
+                  <div className="text-gray-500 text-xs mt-4">
+                    const identity = &#123;
+                  </div>
+                  <div className="text-gray-500 text-xs ml-4">
+                    user: "himanshu",
+                  </div>
+                  <div className="text-gray-500 text-xs ml-4">
+                    state: "unstable",
+                  </div>
+                  <div className="text-gray-500 text-xs ml-4">
+                    mask: {isDecrypted ? 'false' : 'true'},
+                  </div>
+                  <div className="text-gray-500 text-xs ml-4">
+                    status: "Reconstructing..."
+                  </div>
+                  <div className="text-gray-500 text-xs">
+                    &#125;;
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Decrypt Button */}
+            <div className="absolute bottom-4 right-4">
+              <button
+                onClick={handleDecrypt}
+                onMouseEnter={() => setShowDecrypt(true)}
+                onMouseLeave={() => setShowDecrypt(false)}
+                className="text-red-600 text-xs hover:text-red-400 transition-colors"
+              >
+                [DECRYPT]
+              </button>
+            </div>
+            
+            {/* Decrypted Message */}
+            {isDecrypted && (
+              <div className="absolute inset-0 bg-black/90 flex items-center justify-center p-4">
+                <div className="text-center space-y-2">
+                  <div className="text-red-600 text-sm font-bold glitch" data-text="DECRYPTED">
+                    DECRYPTED
+                  </div>
+                  <div className="text-white text-xs max-w-64">
+                    "This isn't who I am. It's who I had to become."
+                  </div>
+                  <button
+                    onClick={handleDecrypt}
+                    className="text-gray-500 text-xs hover:text-white transition-colors"
+                  >
+                    [ENCRYPT]
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
