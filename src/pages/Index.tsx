@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowRight, Eye, EyeOff, X, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const Index = () => {
   const [showRawPersona, setShowRawPersona] = useState(false);
@@ -11,6 +11,7 @@ const Index = () => {
   const [currentLyric, setCurrentLyric] = useState('');
   const [disabledElement, setDisabledElement] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [showResumeModal, setShowResumeModal] = useState(false);
 
   const quotes = [
     "I am Jack's burning CPU.",
@@ -45,7 +46,8 @@ const Index = () => {
       tech: ["React", "Tailwind", "Supabase"],
       challenge: "No streamlined P2P vehicle rental platform with trust",
       solution: "Designed secure listings with live status, map, and payments",
-      outcome: "MVP nearing completion with Stripe integration"
+      outcome: "MVP nearing completion with Stripe integration",
+      link: "https://github.com/himanshu-warulkar/rentmyride"
     },
     {
       title: "BlackJack Game (Terminal)",
@@ -143,6 +145,32 @@ const Index = () => {
     }
   ];
 
+  // Easter egg: Resume unlock listener
+  useEffect(() => {
+    const handleKeyUp = (e: KeyboardEvent) => {
+      const typedText = (e.target as HTMLElement).innerText || '';
+      if (typedText.toLowerCase().includes('resume')) {
+        setShowResumeModal(true);
+      }
+    };
+    
+    let keySequence = '';
+    const handleGlobalKeyUp = (e: KeyboardEvent) => {
+      keySequence += e.key.toLowerCase();
+      if (keySequence.includes('resume')) {
+        setShowResumeModal(true);
+        keySequence = '';
+      }
+      // Reset sequence if it gets too long
+      if (keySequence.length > 20) {
+        keySequence = keySequence.slice(-10);
+      }
+    };
+
+    document.addEventListener('keyup', handleGlobalKeyUp);
+    return () => document.removeEventListener('keyup', handleGlobalKeyUp);
+  }, []);
+
   const handleProjectMayhem = () => {
     console.log("Entering Project Mayhem...");
     
@@ -192,6 +220,32 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {/* Resume Modal */}
+      <Dialog open={showResumeModal} onOpenChange={setShowResumeModal}>
+        <DialogContent className="max-w-4xl h-[80vh] bg-black border-red-600">
+          <DialogHeader>
+            <DialogTitle className="text-red-600 font-serif text-2xl">
+              You're not supposed to want this... but here.
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 bg-white rounded">
+            <iframe
+              src="https://drive.google.com/file/d/1IpdF0a-RIqi8TnU39Iiu9rEn8DxEBpXX/preview"
+              width="100%"
+              height="100%"
+              className="rounded"
+              title="Resume"
+            />
+          </div>
+          <Button 
+            onClick={() => setShowResumeModal(false)}
+            className="bg-red-600 hover:bg-red-700 font-mono"
+          >
+            Burn After Reading
+          </Button>
+        </DialogContent>
+      </Dialog>
+
       {/* Noise Overlay */}
       <div className="fixed inset-0 opacity-[0.03] pointer-events-none z-10 bg-noise"></div>
       
@@ -271,8 +325,8 @@ const Index = () => {
             <div className={`space-y-6 transition-all duration-500 ${showRawPersona ? 'opacity-30 blur-sm' : 'opacity-100'}`}>
               <h3 className="text-2xl font-serif font-bold text-gray-300">Corporate Identity</h3>
               <div className="space-y-4 font-mono text-gray-400">
-                <p>Experienced Software Engineer with 5+ years developing scalable web applications. Proven track record of delivering high-quality solutions on time and within budget.</p>
-                <p>Expert in modern JavaScript frameworks, cloud infrastructure, and agile methodologies. Strong communication skills and ability to work effectively in cross-functional teams.</p>
+                <p>Experienced Software Engineer with 3+ years developing scalable web applications. Proven track record of delivering high-quality solutions on time and within budget.</p>
+                <p>Expert in Linux, modern JavaScript frameworks, cloud infrastructure, and agile methodologies. Ability to lead and work effectively in cross-functional teams.</p>
                 <p>Passionate about clean code, user experience, and continuous learning. Committed to following best practices and industry standards.</p>
               </div>
             </div>
@@ -282,8 +336,8 @@ const Index = () => {
               <h3 className="text-2xl font-serif font-bold text-red-600 glitch">Raw Truth</h3>
               <div className="space-y-4 font-mono text-red-400">
                 <p className="transform hover:skew-x-1 transition-transform">I build things that matter. Not another CRUD app for venture capitalists to flip. Real solutions for real problems.</p>
-                <p className="transform hover:skew-x-1 transition-transform">The corporate world wants us to be replaceable cogs. I refuse. Every line of code I write is an act of rebellion against mediocrity.</p>
-                <p className="transform hover:skew-x-1 transition-transform">Technology should liberate, not enslave. I choose the hard path: building software that serves humanity, not shareholders.</p>
+                <p className="transform hover:skew-x-1 transition-transform">Tech today is addicted to hype. I opt for depth. Behind the libraries, beyond the buzzwords—there's still a place for code that serves purpose over profit.</p>
+                <p className="transform hover:skew-x-1 transition-transform">Whatever the tech, the principle is the same: ship clean, stay honest, build for meaning. That's the only rule I follow.</p>
               </div>
             </div>
           </div>
@@ -299,7 +353,21 @@ const Index = () => {
               <div key={index} className="group border border-gray-800 p-8 hover:border-red-600/50 transition-all duration-300 bg-gradient-to-r from-black to-gray-900/50">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-2xl font-serif font-bold mb-2">{project.title}</h3>
+                    <div className="flex items-center space-x-4 mb-2">
+                      {project.link ? (
+                        <a 
+                          href={project.link} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-2xl font-serif font-bold hover:text-red-600 transition-colors duration-300 flex items-center space-x-2"
+                        >
+                          <span>{project.title}</span>
+                          <ExternalLink className="w-5 h-5" />
+                        </a>
+                      ) : (
+                        <h3 className="text-2xl font-serif font-bold">{project.title}</h3>
+                      )}
+                    </div>
                     <div className="flex items-center space-x-4">
                       <span className={`px-3 py-1 text-sm font-mono border ${
                         project.status === 'Won' ? 'border-green-600 text-green-400' :
