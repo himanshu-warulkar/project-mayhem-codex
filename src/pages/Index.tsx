@@ -363,7 +363,7 @@ const Index = () => {
               {terminalLines.length >= 4 && (
                 <div className="mt-4 space-y-2">
                   <div className="text-yellow-400 text-xs">
-                    [ IDENTITY_FRAGMENT ] => {identityFragments[currentIdentity]}
+                    [ IDENTITY_FRAGMENT ] =&gt; {identityFragments[currentIdentity]}
                     <span className="animate-pulse">_</span>
                   </div>
                   
