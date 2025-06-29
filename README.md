@@ -17,8 +17,8 @@ A radically unorthodox, Fight Club–themed developer portfolio. Built not for r
 
 ##  Directory Structure
 
-```bash
-/
+
+
 ├── public/                 # Static assets, favicon, mask placeholder
 ├── src/                    # Core components and pages
 │   ├── components/         # Reusable visual blocks
