@@ -53,6 +53,7 @@ const Index = () => {
       challenge: "Prebuilt distros hide the magic. I wanted full control.",
       solution: "Built a custom Linux OS from source using LFS handbook and real-time debugging",
       outcome: "Achieved a functioning Linux system booting with GRUB, deepened OS internals mastery"
+      link: "https://www.linkedin.com/posts/himanshu-warulkar_linuxfromscratch-opensource-linux-activity-7194155760639950848-hDKX?utm_source=share&utm_medium=member_desktop"
     },
     {
       title: "RentMyRide",
